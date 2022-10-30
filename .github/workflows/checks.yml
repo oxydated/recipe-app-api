@@ -11,8 +11,8 @@ jobs:
       - name: login to Docker Hub
         uses: docker/login-action@v1
         with:
-          username: ${{ secrets.DOCHEBUH_USER }}
-          password: ${{ secrets.DOCHEBUH_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Checkout
         uses: actions/checkout@v2
