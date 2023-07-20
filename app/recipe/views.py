@@ -2,7 +2,7 @@
 Views for the recipe APIs
 """
 
-from drf_spectacular.utils import(
+from drf_spectacular.utils import (
     extend_schema_view,
     extend_schema,
     OpenApiParameter,
@@ -27,6 +27,7 @@ from core.models import (
 )
 
 from recipe import serializers
+
 
 @extend_schema_view(
     list=extend_schema(
@@ -139,4 +140,4 @@ class TagViewSet(baseRecipeAttrViewSet):
 class IngredientViewSet(baseRecipeAttrViewSet):
     """Manage ingredients in the database."""
     serializer_class = serializers.IngredientSerializer
-    queryset= Ingredient.objects.all()
+    queryset = Ingredient.objects.all()

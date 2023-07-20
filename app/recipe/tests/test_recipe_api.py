@@ -24,8 +24,6 @@ from core.models import (
 from recipe.serializers import (
     RecipeSerializer,
     RecipeDetailSerializer,
-    TagSerializer,
-    IngredientSerializer,
 )
 
 
@@ -60,6 +58,7 @@ def create_recipe(user, **params):
 def create_user(**params):
     """Create and return a new user."""
     return get_user_model().objects.create_user(**params)
+
 
 class PublicRecipeAPITests(TestCase):
     """Test unauthenticated API requestsl."""
@@ -119,7 +118,7 @@ class PrivateRecipeApiTest(TestCase):
 
     def test_create_recipe(self):
         """Test creating a recipe."""
-        payload  = {
+        payload = {
             'title': 'Sample recipe',
             'time_minutes': 30,
             'price': Decimal('5.99'),
@@ -157,8 +156,8 @@ class PrivateRecipeApiTest(TestCase):
         recipe = create_recipe(
             user=self.user,
             title='Sample recipe title',
-            link= 'https://example.com/recipe.pdf',
-            description= 'Sample recipe description.',
+            link='https://example.com/recipe.pdf',
+            description='Sample recipe description.',
         )
 
         payload = {
@@ -277,7 +276,7 @@ class PrivateRecipeApiTest(TestCase):
         recipe.tags.add(tag_breakfast)
 
         tag_lunch = Tag.objects.create(user=self.user, name='Lunch')
-        payload = {'tags': [{'name':'Lunch'}]}
+        payload = {'tags': [{'name': 'Lunch'}]}
         url = detail_url(recipe.id)
         res = self.client.patch(url, payload, format='json')
 
@@ -287,11 +286,11 @@ class PrivateRecipeApiTest(TestCase):
 
     def test_clear_recipe_tags(self):
         """Test clearing a recipe tags."""
-        tag= Tag.objects.create(user=self.user, name='Dessert')
+        tag = Tag.objects.create(user=self.user, name='Dessert')
         recipe = create_recipe(user=self.user)
         recipe.tags.add(tag)
 
-        payload={'tags': []}
+        payload = {'tags': []}
         url = detail_url(recipe.id)
         res = self.client.patch(url, payload, format='json')
 
@@ -347,7 +346,7 @@ class PrivateRecipeApiTest(TestCase):
         """Test create some ingredient while updating a recipe."""
         recipe = create_recipe(user=self.user)
 
-        payload = {'ingredients':[{'name':'Limes'}]}
+        payload = {'ingredients': [{'name': 'Limes'}]}
         url = detail_url(recipe.id)
         res = self.client.patch(url, payload, format='json')
 
@@ -393,7 +392,7 @@ class PrivateRecipeApiTest(TestCase):
         r2.tags.add(tag2)
         r3 = create_recipe(user=self.user, title='Fish and chips')
 
-        params = {'tags':f'{tag1.id}, {tag2.id}'}
+        params = {'tags': f'{tag1.id}, {tag2.id}'}
         res = self.client.get(RECIPES_URL, params)
 
         s1 = RecipeSerializer(r1)
@@ -422,7 +421,6 @@ class PrivateRecipeApiTest(TestCase):
         self.assertIn(s1.data, res.data)
         self.assertIn(s2.data, res.data)
         self.assertNotIn(s3.data, res.data)
-
 
 
 class ImageUploadTests(TestCase):
@@ -457,7 +455,7 @@ class ImageUploadTests(TestCase):
 
     def test_upload_image_bad_request(self):
         """Test uploading invalid image."""
-        url=image_upload_url(self.recipe.id)
+        url = image_upload_url(self.recipe.id)
         payload = {'image': 'notanimage'}
         res = self.client.post(url, payload, format='multipart')
 
